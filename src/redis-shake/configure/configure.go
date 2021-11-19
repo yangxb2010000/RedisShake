@@ -86,6 +86,10 @@ type Configuration struct {
 	Version           string        // version
 	Type              string        // input mode -type=xxx
 	TargetDBMap       map[int]int   // target db map
+
+	/*---------------------------------------------------------*/
+	// interceptor
+	AppendKeyPrefix string `config:"appendKeyPrefix"`
 }
 
 var Options Configuration

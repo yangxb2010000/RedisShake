@@ -415,6 +415,10 @@ func restoreQuicklistEntry(c redigo.Conn, e *rdb.BinEntry) {
 }
 
 func restoreBigRdbEntry(c redigo.Conn, e *rdb.BinEntry) error {
+	if len(conf.Options.AppendKeyPrefix) > 0 {
+		e.Key = append([]byte(conf.Options.AppendKeyPrefix), e.Key...)
+	}
+
 	//read type
 	var err error
 	r := rdb.NewRdbReader(bytes.NewReader(e.Value))
@@ -778,6 +782,10 @@ func RestoreRdbEntry(c redigo.Conn, e *rdb.BinEntry) {
 	 */
 	if conf.Options.SourceRdbSpecialCloud == UCloudCluster {
 		e.Key = e.Key[7:]
+	}
+
+	if len(conf.Options.AppendKeyPrefix) > 0 {
+		e.Key = append([]byte(conf.Options.AppendKeyPrefix), e.Key...)
 	}
 
 	var ttlms uint64

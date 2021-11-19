@@ -106,7 +106,7 @@ func FilterDB(db int) bool {
  *     bool: true means pass
  */
 func HandleFilterKeyWithCommand(scmd string, commandArgv [][]byte) ([][]byte, bool) {
-	if len(conf.Options.FilterKeyWhitelist) == 0 && len(conf.Options.FilterKeyBlacklist) == 0 {
+	if len(conf.Options.FilterKeyWhitelist) == 0 && len(conf.Options.FilterKeyBlacklist) == 0 && len(conf.Options.AppendKeyPrefix) == 0 {
 		// pass if no filter given
 		return commandArgv, false
 	}

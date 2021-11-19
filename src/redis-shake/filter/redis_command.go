@@ -1,6 +1,8 @@
 // redis command struct.
 package filter
 
+import conf "github.com/alibaba/RedisShake/redis-shake/configure"
+
 type getkeys_proc func(args []string) []int
 type redisCommand struct {
 	getkey_proc                getkeys_proc
@@ -97,6 +99,10 @@ func getMatchKeys(redis_cmd redisCommand, args [][]byte) (new_args [][]byte, pas
 		if FilterKey(key) == false {
 			// pass
 			array[number] = firstkey
+			if len(conf.Options.AppendKeyPrefix) > 0 {
+				args[firstkey] = append([]byte(conf.Options.AppendKeyPrefix), args[firstkey]...)
+			}
+
 			number++
 		}
 	}
