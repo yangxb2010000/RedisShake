@@ -415,10 +415,6 @@ func restoreQuicklistEntry(c redigo.Conn, e *rdb.BinEntry) {
 }
 
 func restoreBigRdbEntry(c redigo.Conn, e *rdb.BinEntry) error {
-	if len(conf.Options.AppendKeyPrefix) > 0 {
-		e.Key = append([]byte(conf.Options.AppendKeyPrefix), e.Key...)
-	}
-
 	//read type
 	var err error
 	r := rdb.NewRdbReader(bytes.NewReader(e.Value))
@@ -834,7 +830,9 @@ func RestoreRdbEntry(c redigo.Conn, e *rdb.BinEntry) {
 	}
 
 	// load lua script
-	if e.Type == rdb.RdbFlagAUX && string(e.Key) == "lua" {
+	if e.Type == rdb.RdbFlagAUX &&
+		(string(e.Key) == "lua" ||
+			(len(conf.Options.AppendKeyPrefix) > 0 && string(e.Key) == conf.Options.AppendKeyPrefix+"lua")) {
 		if conf.Options.FilterLua == false {
 			_, err := c.Do("script", "load", e.Value)
 			if err != nil {

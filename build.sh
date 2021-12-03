@@ -37,13 +37,15 @@ info=$info","$t
 echo "[ BUILD RELEASE ]"
 BIN_DIR=$(pwd)/bin/
 cd src
-goos=(linux darwin windows)
-for g in "linux" "darwin" "windows";
+goos=(linux darwin)
+for g in "linux" "darwin";
 do
     echo "try build GOOS=$g"
     export GOOS=$g
+    export GOARCH=amd64
     go build -v -trimpath -ldflags "-X $info" -o "$BIN_DIR/redis-shake.$g" "$MODULE_NAME/redis-shake/main"
     unset GOOS
+    unset GOARCH
     echo "build $g successfully!"
 done
 
